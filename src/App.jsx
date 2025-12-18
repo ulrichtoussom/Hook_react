@@ -1,69 +1,61 @@
-  import { useEffect, useState } from 'react'
+  import { useMemo, useState } from 'react'
 
   import './App.css'
 
   function App() {
 
-    const [isShow, setIsShow] = useState(true)
-    const [startPoint,  setStartPoint] = useState(5)
-    const [showDecompt, setShowDecompt] = useState(startPoint)
+   "use no memo";
 
-    const handleChange = (e) => {
-      setStartPoint(e.target.value)
-      setShowDecompt(e.target.value)
-    }
+    const [userName,  setUserName] = useState('')
+    const [password, setPassword] = useState('')
+
+    const security = useMemo(()=> {
+
+      const startTime = performance.now()
+      while(performance.now()-startTime <200)
+  
+        if(password.length <= 4){
+          return {text : 'Faible' , color: 'red'}
+        }else if( password.length <= 8){
+          return {text : 'Moyen' , color: 'orange'}
+        }
+        return{text : 'Fort' , color: 'green'}
+    }, [password])
+
     
-    console.log('render')
 
-    useEffect(()=> {
+    /**
+     * 
+     * @param {string} word 
+     */
+    
+   function getForcePassword(word){
 
-      const timer = setInterval(()=>{
-          console.log('still turn')
-          setShowDecompt( v => {
-            if(v <= 1 ){
-              clearInterval(timer)
-              return 0
-            }
-            return v-1
+    const startTime = performance.now()
+    while(performance.now()-startTime <200)
 
-          })
-
-        },1000)
-
-      return () => {
-        clearInterval(timer)
+      if(word.length <= 4){
+        return {text : 'Faible' , color: 'red'}
+      }else if( word.length <= 8){
+        return {text : 'Moyen' , color: 'orange'}
       }
+      return{text : 'Fort' , color: 'green'}
+   }  
 
-    },[startPoint])
+      
 
-    return (
-       <div className='container'>
-          <div className="form-check">
-              <input className='form-check-input' type="checkbox" name="" id="showEdit" checked={isShow} onChange={(e)=> setIsShow(e.target.checked)} />
-              <label className='form-check-label' htmlFor="showEdit"> Masquer L'edition </label>
-         </div>
-          <div style={{height: '300vh'}}> 
-            <div className="mb-3 my-3" >
-                  <input 
-                      type="text" value={startPoint} className="form-control" id="exampleFormControlInput1" 
-                      placeholder="name@example.com"
-                      onChange={handleChange}   
-                  />
-                  <div>
-                    
-                  </div>
-                  <span style={{
-                          border: '1px solid green',
-                          display:'inline-block',
-                          margin: '5px',
-                          padding : '20px'
-                  }}>
 
-                    decompte : { showDecompt}
-                  </span>
-            </div>
-          </div>
-       </div>
+    return(
+
+      <div className='container my-3'>
+        <form action="">
+
+          <Input inputType='text'  value={userName}    handleChange={setUserName} label='User Name :'  />
+          <Input inputType='password'  value={password}    handleChange={setPassword} label='Password :' />
+          <label  className='form-text' htmlFor=""> Strengh password : <span translate='no' style={{color:security.color}}> {security.text}</span> </label>
+
+        </form>
+      </div>
     )
 
 
@@ -71,4 +63,42 @@
 
   export default App
 
+
+/**
+ * @typedef {Object} PropsInput
+ * @property {string} inputType 
+ * @property {string} value 
+ * @property {string} label
+ * @property {()=>void} handleChange
+ * 
+ * 
+ */
+/**
+ * 
+ * @param {PropsInput} param0 
+ * @returns 
+ */
+  const Input = function({inputType,value,label,handleChange}){
+
+
+    
+
+    return (
+      
+        <div className='mb-3'>
+
+          <label className='form-label' htmlFor="">{label}</label>
+
+          <input 
+              type={inputType} value={value} 
+              className='form-control'
+              onChange={(e)=> handleChange(e.target.value)}
+              />
+
+        </div>
+
+      
+     
+    )
+  }
 
