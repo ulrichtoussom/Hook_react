@@ -1,66 +1,33 @@
-  import { useMemo, useState } from 'react'
+  import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react'
 
   import './App.css'
 
   function App() {
 
-   "use no memo";
-
-    const [userName,  setUserName] = useState('')
-    const [password, setPassword] = useState('')
-
-    const security = useMemo(()=> {
-
-      const startTime = performance.now()
-      while(performance.now()-startTime <200)
-  
-        if(password.length <= 4){
-          return {text : 'Faible' , color: 'red'}
-        }else if( password.length <= 8){
-          return {text : 'Moyen' , color: 'orange'}
-        }
-        return{text : 'Fort' , color: 'green'}
-    }, [password])
-
     
 
-    /**
-     * 
-     * @param {string} word 
-     */
+    const [userName, setUserName] = useState('ulrich Toussom')
+
+
+    const ref = useRef(undefined)
     
-   function getForcePassword(word){
 
-    const startTime = performance.now()
-    while(performance.now()-startTime <200)
+    useEffect(()=> {
 
-      if(word.length <= 4){
-        return {text : 'Faible' , color: 'red'}
-      }else if( word.length <= 8){
-        return {text : 'Moyen' , color: 'orange'}
-      }
-      return{text : 'Fort' , color: 'green'}
-   }  
+      console.log(ref)
 
-      
+    },[])
 
-
+    
     return(
 
-      <div className='container my-3'>
-        <form action="">
-
-          <Input inputType='text'  value={userName}    handleChange={setUserName} label='User Name :'  />
-          <Input inputType='password'  value={password}    handleChange={setPassword} label='Password :' />
-          <label  className='form-text' htmlFor=""> Strengh password : <span translate='no' style={{color:security.color}}> {security.text}</span> </label>
-
-        </form>
+      <div  className='container'>
+        <Input ref={ref} inputType='text' value={userName} /* handleChange={setUserName} */ />
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt doloremque aperiam quos nemo pariatur fuga, molestiae impedit deleniti quidem dolore mollitia, maxime ut suscipit temporibus atque accusamus, sint nostrum! Quam, est culpa, earum soluta quos laborum libero veniam perspiciatis quas blanditiis rerum. Est earum ex in quis corrupti provident sint neque praesentium omnis ratione beatae inventore, ipsam sit iusto, laboriosam dolor laborum repellat? Sint saepe reprehenderit harum voluptatum iusto provident similique dolore dicta, inventore quasi culpa ipsam labore est commodi quod nisi impedit odio fuga fugit esse assumenda? Qui, minima. Quo repellat natus consequuntur nisi nihil culpa repudiandae, vel totam?
       </div>
     )
-
-
+  
   }
-
   export default App
 
 
@@ -70,35 +37,35 @@
  * @property {string} value 
  * @property {string} label
  * @property {()=>void} handleChange
+ * @property {} inpuRef 
  * 
  * 
  */
 /**
  * 
- * @param {PropsInput} param0 
+ * @param {PropsInput} props 
  * @returns 
  */
-  const Input = function({inputType,value,label,handleChange}){
 
 
-    
+  const Input = forwardRef( function Input(props,ref){
 
-    return (
-      
-        <div className='mb-3'>
+    const id = useId()
+    return(
+      <div className="container">
+        <label htmlFor={id}>{props.label}</label>
+        <input 
+            ref={ref}
+            id={id}
+            className='form-control'
+            type={props.inputType}
+            value={props.value}
+            
+            />
 
-          <label className='form-label' htmlFor="">{label}</label>
-
-          <input 
-              type={inputType} value={value} 
-              className='form-control'
-              onChange={(e)=> handleChange(e.target.value)}
-              />
-
-        </div>
-
-      
-     
+      </div>
     )
-  }
+  })
 
+
+  
