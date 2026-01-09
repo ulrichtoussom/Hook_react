@@ -1,29 +1,57 @@
-  import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { useIncrement } from "./hook/useIncrement"
+import { useToggle } from "./hook/useToggle"
+import Input from "./component/Input"
+import { useFetch } from "./hook/useFetch"
 
-  import './App.css'
+  
 
+  
   function App() {
 
+
+    const [checked, setChecked] = useToggle()
+    const {compteur, Decrement, Increment} = useIncrement({base:0 , max:10, min:1 })
+    
+    const{loading, data, errors} =  useFetch('https://jsonplaceholder.typicode.com/posts?_delay=2000')
+
     
 
-    const [userName, setUserName] = useState('ulrich Toussom')
-
-
-    const ref = useRef(undefined)
     
-
-    useEffect(()=> {
-
-      console.log(ref)
-
-    },[])
-
+    
     
     return(
 
       <div  className='container'>
-        <Input ref={ref} inputType='text' value={userName} /* handleChange={setUserName} */ />
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt doloremque aperiam quos nemo pariatur fuga, molestiae impedit deleniti quidem dolore mollitia, maxime ut suscipit temporibus atque accusamus, sint nostrum! Quam, est culpa, earum soluta quos laborum libero veniam perspiciatis quas blanditiis rerum. Est earum ex in quis corrupti provident sint neque praesentium omnis ratione beatae inventore, ipsam sit iusto, laboriosam dolor laborum repellat? Sint saepe reprehenderit harum voluptatum iusto provident similique dolore dicta, inventore quasi culpa ipsam labore est commodi quod nisi impedit odio fuga fugit esse assumenda? Qui, minima. Quo repellat natus consequuntur nisi nihil culpa repudiandae, vel totam?
+
+          <input className="form-check-input" type="checkbox" checked={checked} 
+            name="" id="" 
+            onChange={setChecked}
+            />
+            <div className="my-3">
+              <button className="btn btn-success" onClick={Increment}>Incrementer</button>
+      
+              <button className="btn btn-danger" onClick={()=> Decrement()}>Decrementer</button>
+              <div> <label className="form-label" htmlFor="">{compteur}</label></div>
+            </div>
+
+            <div>
+              {checked &&  <Input />}
+            </div>
+
+            <div>
+
+              {loading && <div> Chargement ...</div>}
+              {data  && <div> {data} </div>}
+              {errors  && <div> {errors} </div>}
+
+
+            </div>
+
+           <div>
+           </div>
+
+            
+        
       </div>
     )
   
@@ -31,41 +59,8 @@
   export default App
 
 
-/**
- * @typedef {Object} PropsInput
- * @property {string} inputType 
- * @property {string} value 
- * @property {string} label
- * @property {()=>void} handleChange
- * @property {} inpuRef 
- * 
- * 
- */
-/**
- * 
- * @param {PropsInput} props 
- * @returns 
- */
 
 
-  const Input = forwardRef( function Input(props,ref){
-
-    const id = useId()
-    return(
-      <div className="container">
-        <label htmlFor={id}>{props.label}</label>
-        <input 
-            ref={ref}
-            id={id}
-            className='form-control'
-            type={props.inputType}
-            value={props.value}
-            
-            />
-
-      </div>
-    )
-  })
-
+ 
 
   
