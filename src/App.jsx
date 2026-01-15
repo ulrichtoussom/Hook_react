@@ -1,72 +1,43 @@
-  import { useEffect, useState } from 'react'
 
   import './App.css'
+  import 'bootstrap/dist/css/bootstrap.min.css'
+import { useMemo, useState } from 'react'
+import { InfoMemo } from './component/Info'
+import Demo from './component/Demo'
+import Input from './component/Input'
+import { useIncrement } from './hook/useIncrement'
+
+
 
   function App() {
 
-    const [isShow, setIsShow] = useState(true)
-    const [startPoint,  setStartPoint] = useState(5)
-    const [showDecompt, setShowDecompt] = useState(startPoint)
+    const [inputValue , SetInputValue] = useState('')
 
-    const handleChange = (e) => {
-      setStartPoint(e.target.value)
-      setShowDecompt(e.target.value)
-    }
-    
-    console.log('render')
-
-    useEffect(()=> {
-
-      const timer = setInterval(()=>{
-          console.log('still turn')
-          setShowDecompt( v => {
-            if(v <= 1 ){
-              clearInterval(timer)
-              return 0
-            }
-            return v-1
-
-          })
-
-        },1000)
-
+    const handleClick = useMemo(()=>{
       return () => {
-        clearInterval(timer)
+          console.log(inputValue.length)
       }
 
-    },[startPoint])
+    },[inputValue.length])
+    
+    const {result , Increment, Decrement} = useIncrement()
 
-    return (
-       <div className='container'>
-          <div className="form-check">
-              <input className='form-check-input' type="checkbox" name="" id="showEdit" checked={isShow} onChange={(e)=> setIsShow(e.target.checked)} />
-              <label className='form-check-label' htmlFor="showEdit"> Masquer L'edition </label>
-         </div>
-          <div style={{height: '300vh'}}> 
-            <div className="mb-3 my-3" >
-                  <input 
-                      type="text" value={startPoint} className="form-control" id="exampleFormControlInput1" 
-                      placeholder="name@example.com"
-                      onChange={handleChange}   
-                  />
-                  <div>
-                    
-                  </div>
-                  <span style={{
-                          border: '1px solid green',
-                          display:'inline-block',
-                          margin: '5px',
-                          padding : '20px'
-                  }}>
+      return(
+        <div className="container ">
 
-                    decompte : { showDecompt}
-                  </span>
+            <Input value={inputValue} handleChange={SetInputValue} />  
+            <InfoMemo click={handleClick} />
+            <div className='d-flex gap-2'>
+              <button className='btn btn-success' type="button" onClick={Increment}>Incrementer</button>
+              <button className='btn btn-danger' type="button" onClick={Decrement}>Decrementer</button>
+              <span className='align-self-center fs-4'>{result}</span>
             </div>
-          </div>
-       </div>
-    )
+            
 
 
+          
+        </div>
+      )
   }
 
   export default App
