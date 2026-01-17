@@ -1,74 +1,49 @@
-  import { useEffect, useState } from 'react'
 
-  import './App.css'
 
-  function App() {
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Section from './component/Section'
 
-    const [isShow, setIsShow] = useState(true)
-    const [startPoint,  setStartPoint] = useState(5)
-    const [showDecompt, setShowDecompt] = useState(startPoint)
+import {ThemeContextProvider, useTheme } from './hook/useTheme'
+import Other from './component/Other'
+import { Children } from 'react'
+import { useContext } from 'react'
 
-    const handleChange = (e) => {
-      setStartPoint(e.target.value)
-      setShowDecompt(e.target.value)
-    }
-    
-    console.log('render')
+export default function App() {
 
-    useEffect(()=> {
 
-      const timer = setInterval(()=>{
-          console.log('still turn')
-          setShowDecompt( v => {
-            if(v <= 1 ){
-              clearInterval(timer)
-              return 0
-            }
-            return v-1
+  // console.log('App' , theme)
 
-          })
+  return(
 
-        },1000)
+    <>
+        <Other />
 
-      return () => {
-        clearInterval(timer)
-      }
+        <ThemeContextProvider>
 
-    },[startPoint])
+            <SwitcherTheme />
+            <div className='container alert alert-danger'>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur repellendus commodi exercitationem, labore harum minima perferendis molestiae, nihil nisi vel voluptatibus nulla delectus, non magni consequatur et consectetur. In ex, sit commodi distinctio, laudantium suscipit vel voluptatem laborum quas cupiditate animi, impedit modi quia nesciunt quo voluptatibus repellendus qui. Quia, illum. Voluptatum nesciunt suscipit officiis esse pariatur quam, maxime corporis, obcaecati ipsa commodi ab dicta, sint voluptatem est corrupti optio repudiandae dolorem harum assumenda doloribus ipsum? Magnam incidunt illum repudiandae maxime veniam et placeat, quod quae, ex maiores facere nobis itaque reiciendis ut dolores eum cum sit inventore explicabo sapiente.
 
-    return (
-       <div className='container'>
-          <div className="form-check">
-              <input className='form-check-input' type="checkbox" name="" id="showEdit" checked={isShow} onChange={(e)=> setIsShow(e.target.checked)} />
-              <label className='form-check-label' htmlFor="showEdit"> Masquer L'edition </label>
-         </div>
-          <div style={{height: '300vh'}}> 
-            <div className="mb-3 my-3" >
-                  <input 
-                      type="text" value={startPoint} className="form-control" id="exampleFormControlInput1" 
-                      placeholder="name@example.com"
-                      onChange={handleChange}   
-                  />
-                  <div>
-                    
-                  </div>
-                  <span style={{
-                          border: '1px solid green',
-                          display:'inline-block',
-                          margin: '5px',
-                          padding : '20px'
-                  }}>
-
-                    decompte : { showDecompt}
-                  </span>
+                <Section />
+              
             </div>
-          </div>
-       </div>
-    )
 
+        </ThemeContextProvider>
+    </>
 
-  }
+    
+    
+  )
+}
 
-  export default App
+function SwitcherTheme(){
 
+  const {toggleTheme, theme} = useTheme()
 
+  return(
+    <div>
+       <button className='btn btn-warning' type="button" onClick={toggleTheme}>ToggleTheme</button>
+       <span> {theme} </span>
+    </div>
+  )
+}
