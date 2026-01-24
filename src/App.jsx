@@ -6,7 +6,6 @@ import Section from './component/Section'
 import {ThemeContextProvider, useTheme } from './hook/useTheme'
 import Other from './component/Other'
 import { Children } from 'react'
-import { useContext } from 'react'
 
 export default function App() {
 
